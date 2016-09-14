@@ -1,0 +1,7 @@
+D:\VisualStudioProjects\Bank_Machine\Bank_Machine\bin\Debug\Bank_Machine.exe.config
+D:\VisualStudioProjects\Bank_Machine\Bank_Machine\obj\Debug\Bank_Machine.csprojResolveAssemblyReference.cache
+D:\VisualStudioProjects\Bank_Machine\Bank_Machine\bin\Debug\Bank_Machine.exe
+D:\VisualStudioProjects\Bank_Machine\Bank_Machine\bin\Debug\Bank_Machine.pdb
+D:\VisualStudioProjects\Bank_Machine\Bank_Machine\bin\Debug\MySql.Data.dll
+D:\VisualStudioProjects\Bank_Machine\Bank_Machine\obj\Debug\Bank_Machine.exe
+D:\VisualStudioProjects\Bank_Machine\Bank_Machine\obj\Debug\Bank_Machine.pdb
