@@ -145,16 +145,9 @@ namespace BankMachine
             Console.WriteLine("  4 - Print");
             Console.WriteLine("  0 - Exit\n\n");
 
-
             string UserChoice_MainMenu = Console.ReadLine();
 
-            //TODO create function to export checks if userinput = 1 2 3 4 5.
-
             // validation check to catch if userinput is not 1, 2, 3 4 5
-
-
-            
-
             int ParsedUserInput = 0;
             if (Int32.TryParse(UserChoice_MainMenu, out ParsedUserInput))
             {
@@ -185,7 +178,7 @@ namespace BankMachine
                     default:
                         //Validation failed
                         Console.WriteLine("  Switch statement Validation failed");
-                        Console.WriteLine("  The input:\" " + UserChoice_MainMenu + " \" is not an available option");
+                        Console.WriteLine("  Sorry, the input:\" " + UserChoice_MainMenu + " \" is not an available option");
 
                         System.Threading.Thread.Sleep(3500);
                         Console.Clear();
@@ -208,6 +201,7 @@ namespace BankMachine
             }
 
         }
+
 
         private static void Withdraw()
         {
@@ -233,27 +227,27 @@ namespace BankMachine
                     case 1:
                         float Amount = 10;
                         Console.WriteLine("  You choose 1.  EUR: " + Amount + " ");
-                        TransferMin(Amount, false);
+                        Transfer(Amount, false);
                         break;
                     case 2:
                         Amount = 20;
                         Console.WriteLine("  You choose 2.  EUR: " + Amount + " ");
-                        TransferMin(Amount, false);
+                        Transfer(Amount, false);
                         break;
                     case 3:
                         Amount = 50;
                         Console.WriteLine("  You choose 3.  EUR: " + Amount + " ");
-                        TransferMin(Amount, false);
+                        Transfer(Amount, false);
                         break;
                     case 4:
                         Amount = 100;
                         Console.WriteLine("  You choose 4.  EUR: " + Amount + " ");
-                        TransferMin(Amount, false);
+                        Transfer(Amount, false);
                         break;
                     case 5:
                         Amount = 250;
                         Console.WriteLine("  You choose 5.  EUR: " + Amount + " ");
-                        TransferMin(Amount, false);
+                        Transfer(Amount, false);
                         break;
                     case 6:
                         Console.WriteLine("  You choose 6:  Enter your amount manually");
@@ -335,75 +329,78 @@ namespace BankMachine
         }
 
 
-        private static bool TransferPlus(int Amount) //TODO
+        private static bool Transfer(float Amount, bool isAmountPositive) //TODO make it compatible with Deposit function
         {
 
-            return false;
+            DBClass DBconnect = new DBClass();
 
-        }
+            string StringAmount = Amount.ToString();
+            string userId = DBconnect.SelectSingle("id");
+            int intUserId;
+            int.TryParse(userId, out intUserId);
+            string userName = DBconnect.SelectSingle("UserName");
+            string Previousbalance = DBconnect.SelectSingle("balance");
+            float floatPreviousBalance = float.Parse(Previousbalance);
+            float NewBalance;
 
-
-        private static bool TransferMin(float Amount, bool isAmountPositive) //TODO
+            if (isAmountPositive)
             {
 
-                DBClass DBconnect = new DBClass();
+                NewBalance = floatPreviousBalance + Amount;
 
-                string StringAmount = Amount.ToString();
-                string userId = DBconnect.SelectSingle("id");
-                int intUserId;
-                int.TryParse(userId, out intUserId);
-                string userName = DBconnect.SelectSingle("UserName");
-                string Previousbalance = DBconnect.SelectSingle("balance");
-                float floatPreviousBalance = float.Parse(Previousbalance);
-            
-                try
+            }
+            else
+            {
+
+                NewBalance = floatPreviousBalance - Amount;
+
+            }
+
+            try
+            {
+
+                DBconnect.Update(intUserId, NewBalance);
+                Console.WriteLine("  Action complete.\n");
+
+                if (CheckIfUserWantsReceipt())
                 {
 
-                    float NewBalance = floatPreviousBalance - Amount;
+                    PretendToConnect();
+                    MainMenu();
 
-                    DBconnect.Update(intUserId, NewBalance);
-                    Console.WriteLine("  Action complete.\n");
+                }
+                else
+                {
+                    Console.Clear();
 
-                    //TODO does user want receipt?
-                    if (CheckIfUserWantsReceipt())
+                    if (CheckIfUserWantsMainMenu())
                     {
-
-                        PretendToConnect();
+                        Console.Clear();
                         MainMenu();
 
                     }
                     else
                     {
-                        Console.Clear();
 
-                        if (CheckIfUserWantsMainMenu())
-                        {
-                            Console.Clear();
-                            MainMenu();
-
-                        }
-                        else
-                        {
-
-                            //nextCustomer();
-
-                        };
+                        //nextCustomer();
 
                     };
 
-                    return true;
+                };
 
-                }
-                catch
-                {
-
-                    Console.WriteLine("INSERT FAILED!!!!");
-
-                };  
-
-                return false; //default 
+                return true;
 
             }
+            catch
+            {
+
+                Console.WriteLine("INSERT FAILED!!!!");
+
+            };  
+
+            return false; //default 
+
+        }
 
 
         private static int EnterManualWithdrawAmount() //TODO
@@ -455,37 +452,13 @@ namespace BankMachine
                 CheckIfUserWantsReceipt();
 
                 return false;
+
             }
-
-            //if (intUserReceiptPreference == 1)
-            //{
-                    
-            //    PretendToConnect();
-            //    MainMenu();
-                
-            //}
-            //else if(intUserReceiptPreference == 2)
-            //{
-            //    if(CheckIfUserWantsMainMenu())
-            //    {
-
-            //        Console.Clear();
-            //        MainMenu();
-            //}
-            //else
-            //{
-
-            //    Console.WriteLine("Weird exception in Main menu choice");
-
-            //    }
-                    
-
-            //}
-            
+      
         }
 
 
-        private static bool CheckIfUserWantsMainMenu() //TODO
+        private static bool CheckIfUserWantsMainMenu() 
         {
 
             Console.WriteLine("  Would you like to return to Main Menu? Please choose out of the following options: \n\n");
