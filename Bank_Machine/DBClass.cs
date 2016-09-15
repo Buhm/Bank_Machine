@@ -88,7 +88,7 @@ namespace BankMachine
             int intAmount;
             int.TryParse(Amount, out intAmount);
 
-            Console.WriteLine("INSERT INTO transfers (user_id, amount, isamountpositive) VALUES( " + UserId + ", " + Amount + ", " + IsAmountPositive + ")");
+            //Console.WriteLine("INSERT INTO transfers (user_id, amount, isamountpositive) VALUES( " + UserId + ", " + Amount + ", " + IsAmountPositive + ")");
             string query = "INSERT INTO transfers (user_id, amount, isamountpositive) VALUES( " + intUserId + ", " + intAmount + ", " + IsAmountPositive + ")";
 
 
@@ -113,7 +113,7 @@ namespace BankMachine
             //variable to hold the changed balance amount
 
             string query = "UPDATE users SET balance=" + NewBalance + " WHERE id=" + 1 + "";
-            Console.WriteLine("query: {0}", query);
+            //Console.WriteLine("query: {0}", query);
 
             //Open connection
             if (this.OpenConnection() == true)

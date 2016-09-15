@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace BankMachine
 {
@@ -39,7 +40,7 @@ namespace BankMachine
 
             var DBconnect = new DBClass();
             Console.WriteLine("  Please provide your Personal Identification Number (PIN):");
-            Console.WriteLine("  Please confirm your PIN when ready by pressing the ENTER key once\n\n");
+            Console.WriteLine("  Please confirm your PIN when ready by pressing the ENTER key once\n\n  ");
 
             string UserPin = Orb.App.Console.ReadPassword();
 
@@ -73,11 +74,12 @@ namespace BankMachine
 
             var DBconnect = new DBClass();
             string UserCurrentBalance = DBconnect.SelectSingle("Balance");
+            float parsedUserCurrentBalance = float.Parse(UserCurrentBalance);
+            string CulturedBalanceOutput = parsedUserCurrentBalance.ToString("C");
             string UserName = DBconnect.SelectSingle("UserName");
-
             Console.Clear();
             Console.WriteLine("\n  Welcome, {0}\n\n", UserName);
-            Console.WriteLine("  Your Balance is: \n\n" + "  EUR:  " + UserCurrentBalance + "\n\n");
+            Console.WriteLine("  Your Balance is: \n\n  " + CulturedBalanceOutput + "\n\n");
 
             return UserCurrentBalance;
 
@@ -153,7 +155,7 @@ namespace BankMachine
                         RestartProgram();
                         break;
                     default:
-                        Console.WriteLine("  Switch statement Validation failed");
+                        //Console.WriteLine("  Switch statement Validation failed");
                         Console.WriteLine("  Sorry, the input:\" " + UserChoiceMainMenu + " \" is not an available option");
                         System.Threading.Thread.Sleep(3500);
                         Console.Clear();
@@ -164,7 +166,7 @@ namespace BankMachine
             }
             else
             {
-                Console.WriteLine("  Parse Validation failed");
+                //Console.WriteLine("  Parse Validation failed");
                 Console.WriteLine("  The input:\" " + UserChoiceMainMenu + " \" is not an available option");
 
                 System.Threading.Thread.Sleep(3500);
@@ -187,7 +189,7 @@ namespace BankMachine
             Console.WriteLine("  4 - 100");
             Console.WriteLine("  5 - 250");
             Console.WriteLine("  6 - Enter your amount manually");
-            Console.WriteLine("  0 - RestartProgram\n\n");
+            Console.WriteLine("  0 - Back to Main Menu\n\n");
             string UserChoiceWithdrawAmount = Console.ReadLine();
 
             int ParsedUserInput = 0;
@@ -233,11 +235,10 @@ namespace BankMachine
                         }
                         break;
                     case 0:
-                        Console.WriteLine("  You choose 0, Exiting now..");
-                        RestartProgram();
+                        MainMenu();
                         break;
                     default:
-                        Console.WriteLine("  Switch statement Validation failed");
+                        //Console.WriteLine("  Switch statement Validation failed");
                         Console.WriteLine("  The input:\" " + UserChoiceWithdrawAmount + " \" is not an available option");
                         System.Threading.Thread.Sleep(3500);
                         Console.Clear();
@@ -248,7 +249,7 @@ namespace BankMachine
             }
             else
             {
-                Console.WriteLine("  Parse statement Validation failed");
+                //Console.WriteLine("  Parse statement Validation failed");
                 Console.WriteLine("  The input:\" " + UserChoiceWithdrawAmount + " \" is not an available option");
                 System.Threading.Thread.Sleep(3500);
                 Console.Clear();
@@ -262,19 +263,16 @@ namespace BankMachine
         {
 
             Console.WriteLine("Please enter the amount you would like to Deposit:");
-            Console.WriteLine("Your limit is set to 1000");
+            Console.WriteLine("Your limit is set to 1000\n\n");
 
             string UserChoiceDepositAmount = Orb.App.Console.ReadPassword();
             float ParsedUserInput;
             if (float.TryParse(UserChoiceDepositAmount, out ParsedUserInput))
             {
 
-                float remainder = ParsedUserInput % 5; //needs testing if works
-                Console.WriteLine("Remainder Deposit: {0}", remainder);
-
+                float remainder = ParsedUserInput % 5; 
                 if ((ParsedUserInput <= 1000) && (remainder == 0))
-                {
-                    Console.WriteLine("  Your deposit was Successful!!"); 
+                { 
                     Transfer(ParsedUserInput, true);
                 }
                 else
@@ -349,7 +347,10 @@ namespace BankMachine
             {
                 DBconnect.Update(intUserId, NewBalance);
                 DBconnect.Insert(userId, StringAmount, isAmountPositive);
-                Console.WriteLine("  Action complete.\n");
+                System.Threading.Thread.Sleep(2000);
+
+                Console.Clear();
+                Console.WriteLine("  Your request has been completed.\n\n");
                 if (CheckIfUserWantsReceipt())
                 {
                     PretendToConnect();
@@ -392,9 +393,7 @@ namespace BankMachine
                 return ParsedUserInput;
             }
             else
-            {
-                Console.WriteLine("  Could not parse that withdrawal amount! ", UserChoiceWithdrawAmount); 
-                System.Threading.Thread.Sleep(500);
+            { 
                 MainMenu();
                 return 0;
             }
@@ -426,7 +425,7 @@ namespace BankMachine
                         return userReceiptPreference;
 
                     default:
-                        Console.WriteLine("Hit a switch exception");
+                        //Console.WriteLine("Hit a switch exception");
                         System.Threading.Thread.Sleep(500);
                         MainMenu();
                         return false;
@@ -435,7 +434,7 @@ namespace BankMachine
             }
             else
             {
-                Console.WriteLine("Hit a parse exception");
+                //Console.WriteLine("Hit a parse exception");
                 Console.WriteLine("  The input:\" " + userInput + " \" is not an available option");
                 System.Threading.Thread.Sleep(3500);
                 Console.Clear();
