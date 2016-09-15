@@ -88,9 +88,9 @@ namespace BankMachine
             int intAmount;
             int.TryParse(Amount, out intAmount);
 
-            Console.WriteLine("INSERT INTO transfers (user_id, amount, isamountpositive) VALUES( " + UserId + ", " + Amount + ", false)");
-            string query = "INSERT INTO transfers (user_id, amount, isamountpositive) VALUES( " + intUserId + ", " + intAmount + ", false)";
-                 
+            Console.WriteLine("INSERT INTO transfers (user_id, amount, isamountpositive) VALUES( " + UserId + ", " + Amount + ", " + IsAmountPositive + ")");
+            string query = "INSERT INTO transfers (user_id, amount, isamountpositive) VALUES( " + intUserId + ", " + intAmount + ", " + IsAmountPositive + ")";
+
 
             //open connection
             if (this.OpenConnection() == true)
